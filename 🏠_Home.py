@@ -26,7 +26,7 @@ CHAT="Assistant"
 
 st.set_page_config(page_title="InteresThing", page_icon=":mag_right:", layout="wide")
 #menu will be extracted from school options
-menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝","InteresThing Commmunity", "InteresThing Treasury 🏛️"]
+menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝", "InteresThing Treasury 🏛️"]
 
 db_file = st.secrets["current_db_file"] #uploaded in streamlit server
 num_hobbies = st.secrets["num_hobbies"]
