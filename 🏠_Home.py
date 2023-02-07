@@ -1,7 +1,7 @@
 #version 7 - no login
 #import openai
 import streamlit as st
-from streamlit_chat import message
+#from streamlit_chat import message
 import time
 #pipimport requests
 import sqlite3
@@ -15,7 +15,6 @@ import streamlit_analytics
 from int_quiz import personality_generator, reveal_questions
 from datetime import datetime
 import random
-
 #Global Declaration
 
 HOME = "Homepage"
