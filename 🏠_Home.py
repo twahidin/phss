@@ -25,7 +25,7 @@ CHAT="Assistant"
 
 st.set_page_config(page_title="InteresThing", page_icon=":mag_right:", layout="wide")
 #menu will be extracted from school options
-menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝","InteresThing Treasury 🏛️"]
+
 
 db_file = st.secrets["current_db_file"] #uploaded in streamlit server
 num_hobbies = st.secrets["num_hobbies"]
@@ -711,6 +711,7 @@ def main():
 	st.sidebar.image('images/cotf_logo.png', width=300)
 	st.title(":red[InteresThing]")
 	#menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝", "InteresThing Assistant 👨‍💻️", "InteresThing Treasury 🏛️"]
+	menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝","InteresThing Treasury 🏛️"]
 	selected_menu = st.sidebar.selectbox("Select an option", menu)
 
 	#Session declarations
