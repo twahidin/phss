@@ -1,4 +1,4 @@
-#version 6 - To put in community page 
+#version 7 - no login
 import openai
 import streamlit as st
 from streamlit_chat import message
@@ -26,7 +26,7 @@ CHAT="Assistant"
 
 st.set_page_config(page_title="InteresThing", page_icon=":mag_right:", layout="wide")
 #menu will be extracted from school options
-menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝", "InteresThing Treasury 🏛️"]
+menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝","InteresThing Treasury 🏛️"]
 
 db_file = st.secrets["current_db_file"] #uploaded in streamlit server
 num_hobbies = st.secrets["num_hobbies"]
@@ -412,15 +412,17 @@ def combine(word_list): #not in use - previous version
 
 def edit_my_list(word_list):
 	st.write(f'This is the combine list of old and new interests/hobbies, please choose {num_hobbies} you wish to keep')
+	word_list = remove_duplicates(word_list)
 	options = st.multiselect("Suggested interests/hobbies",word_list,word_list, label_visibility='collapsed')
 	if len(options) == 0:
 		st.error("You did not select any interests/hobbies")
 	elif len(options) > num_hobbies:
 		st.error(f"More than {num_hobbies} interests/hobbies selected, please remove some")
 	#st.write("#")
-	if st.button("Update my list"):
-		st.session_state.treasure_key  = remove_duplicates(options)
-		update_interest(db_file)
+	else:
+		if st.button("Update my list"):
+			st.session_state.treasure_key  = remove_duplicates(options)
+			update_interest(db_file)
 
 
 def update_list(new_list, old_list): #part of extract like show interests function not in use
@@ -735,46 +737,39 @@ def main():
 	
 
 
-	placeholder1 = st.sidebar.empty()
-	if st.session_state.login_key != True:
-		with streamlit_analytics.track():
-			with placeholder1.form(key="authenticate"):
-				st.write("Please key in your school and student code to record your discovery")
-				school_code = st.text_input('School code:')
-				student_code = st.text_input('Student code:')
-				submit_button = st.form_submit_button(label='Login')
-				if submit_button:
-					if school_code == "admin101" and student_code == "joe":
-						st.session_state.admin_key = True
-					int_list = check_student_code_return_int_list(school_code, student_code, db_file)
-					st.write(int_list)
-					if int_list != False:
-						if st.session_state.treasure_key == None:
-							if int_list == "":
-								st.session_state.treasure_key = []
-							elif len(int_list) > 0:
-								st.session_state.treasure_key = int_list
-						else:
-							int_json = json.dumps(st.session_state.treasure_key)
-							update_int_list(db_file, school_code.lower(), student_code.lower(), int_json)
-						st.session_state.stu_key = student_code.lower()
-						st.session_state.school_key = school_code.lower()
-						#st.write("here")
-						st.session_state.login_key = True
-						insert_student_data(st.session_state.school_key, st.session_state.stu_key , HOME, db_file)
+	# placeholder1 = st.sidebar.empty()
+	# if st.session_state.login_key != True:
+	# 	with streamlit_analytics.track():
+	# 		with placeholder1.form(key="authenticate"):
+	# 			st.write("Please key in your school and student code to record your discovery")
+	# 			school_code = st.text_input('School code:')
+	# 			student_code = st.text_input('Student code:')
+	# 			submit_button = st.form_submit_button(label='Login')
+	# 			if submit_button:
+	# 				if school_code == "admin101" and student_code == "joe":
+	# 					st.session_state.admin_key = True
+	# 				int_list = check_student_code_return_int_list(school_code, student_code, db_file)
+	# 				st.write(int_list)
+	# 				if int_list != False:
+	# 					if st.session_state.treasure_key == None:
+	# 						if int_list == "":
+	# 							st.session_state.treasure_key = []
+	# 						elif len(int_list) > 0:
+	# 							st.session_state.treasure_key = int_list
+	# 					else:
+	# 						int_json = json.dumps(st.session_state.treasure_key)
+	# 						update_int_list(db_file, school_code.lower(), student_code.lower(), int_json)
+	# 					st.session_state.stu_key = student_code.lower()
+	# 					st.session_state.school_key = school_code.lower()
+	# 					#st.write("here")
+	# 					st.session_state.login_key = True
+	# 					insert_student_data(st.session_state.school_key, st.session_state.stu_key , HOME, db_file)
 
 
-	if st.session_state.login_key != True:
-		st.sidebar.warning("You are not logged in, all your information on this website will not be recorded. Please click on the Homepage 🏠 to login")
-	if st.session_state.login_key == True:
-		placeholder1.empty()
+	if st.session_state.treasure_key == None:
+		st.sidebar.warning("Please acess the quiz or wizard to display your interest links")
 
-	if st.session_state.admin_key== True:
-		admin = st.sidebar.button("Download CSV Data")
-		if admin:
-			download_student_data()
-
-	logout = st.sidebar.button("Logout")
+	logout = st.sidebar.button("Reset my hobbies")
 	if logout:
 		for key in st.session_state.keys():
 			del st.session_state[key]
@@ -789,9 +784,6 @@ def main():
 		st.write("**:blue[To start, click on the sidebar to log in and navigate the application]**")
 		st.write("**:orange[For mobile device users, click on the upper left '>' arrow to access the sidebar]**")
 
-		if st.session_state.login_key == True:
-			#placeholder1.empty()
-			pass
 
 		# if st.session_state.login_key != True:
 		# 	st.sidebar.warning("You are not login, all your information on this website will not be recorded. Please click on the Discovery Homepage 🏠 to login")
@@ -825,7 +817,7 @@ def main():
 				#options = st.multiselect('Choose 3 to 5 words that attracts you', word_lists)
 				#st.write(st.session_state.word_key)
 				options = select_words(st.session_state.word_key)
-				insert_student_data(st.session_state.school_key, st.session_state.stu_key , WIZARD, db_file)
+				#insert_student_data(st.session_state.school_key, st.session_state.stu_key , WIZARD, db_file)
 				#st.session_state.word_key = options
 				if options != None:
 					st.session_state.option_key = options
@@ -890,7 +882,7 @@ def main():
 					int_list = match_mbti_to_resources(pc, db_file)
 					st.session_state.quiz_key = int_list
 					#st.write(int_list)
-					insert_student_data(st.session_state.school_key, st.session_state.stu_key , QUIZ, db_file)
+					#insert_student_data(st.session_state.school_key, st.session_state.stu_key , QUIZ, db_file)
 				elif submit_button and a_list[1] == True:
 					st.warning('You have to make a choice for all statements to generate your report', icon="⚠️")
 			if st.session_state.quiz_key != None:
@@ -913,44 +905,24 @@ def main():
 			# 	st.write('#')
 			# 	extract_student_info(st.session_state.treasure_key)
 	elif selected_menu == "InteresThing Commmunity":
-		with streamlit_analytics.track():
-			if st.session_state.login_key != True:
-				st.write("You need to login to access this feature")
-			else:
-				st.subheader("InterestThing Commmunity")
-				st_disqus("phss-1", title="PHSS InteresThing Commmunity Forum")
+		st.subheader("InterestThing Commmunity")
+		st_disqus("phss-1", title="PHSS InteresThing Commmunity Forum")
 
 
-	elif selected_menu == "InteresThing Assistant 👨‍💻️":
-		st.subheader("InterestThing Assistant")
-		st.write("Feature to be released soon")
-		#st.write("This feature allows you to discover interests through a conversation with an assistant")
-		#insert_student_data(st.session_state.school_key, st.session_state.stu_key , CHAT, db_file)
-		# test_words = ["Hobby", "Skill", "Indoor", "Outdoor", "Challenging", "Simple", "Intellectual", "Physical", "Alone", "Group" ]
-		# restart = st.sidebar.button("Restart conversation")
-		# if restart:
-		# 	st.session_state.chat_key = None
-		# 	st.session_state['generated'] = []
-		# 	st.session_state['past'] = []
-		# if st.session_state.treasure_key == None:
-		# 	st.session_state.treasure_key = []
-		# if st.session_state.login_key != True:
-		# 	st.write("You need to login to access this feature")
-		# elif st.session_state.login_key == True:
-		# 	#st.write(":blue[Welcome to the InteresThing Smart Assistant]")
-		# 	st.write("#")
-		# 	#st.write(":blue[To begin, please select at least 3 key words or phrases]")
-		# 	placeholder2 = st.empty()
-		# 	with placeholder2.container():
-		# 		prompt = select_words(test_words)
-		# 		if prompt == None:
-		# 			prompt = ""
-		# 		else:
-		# 			st.session_state.chat_key = prompt
-					
-		# 	if st.session_state.chat_key != None:
-		# 		placeholder2.empty()		
 		# 		chat_bot(st.session_state.chat_key,db_file)
+
+	elif selected_menu == "Teacher's Page":
+		with placeholder1.form(key="authenticate"):
+			st.write("Please key in the credentials to access this page")
+			school_code = st.text_input('School code:')
+			student_code = st.text_input('Student code:')
+			submit_button = st.form_submit_button(label='Login')
+			if submit_button:
+				if school_code == "admin101" and student_code == "joe":
+					admin = st.button("Download CSV Data")
+					if admin:
+						download_student_data()
+					
 
 	elif selected_menu == "InteresThing Treasury 🏛️":
 		st.subheader("InterestThing Treasury")
@@ -958,7 +930,7 @@ def main():
 		#st.write("Click on the start button to draw 3 random interests")
 		with streamlit_analytics.track():
 			extract_likes_show_interests(db_file)
-			insert_student_data(st.session_state.school_key, st.session_state.stu_key , TREASURE, db_file)
+			#insert_student_data(st.session_state.school_key, st.session_state.stu_key , TREASURE, db_file)
 			#st.write("Feature to be released soon")
 			st.write('##')
 			if st.session_state.add_key != None and st.session_state.treasure_key != None:
