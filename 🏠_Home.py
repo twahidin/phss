@@ -711,7 +711,7 @@ def main():
 	st.sidebar.image('images/cotf_logo.png', width=300)
 	st.title(":red[InteresThing]")
 	#menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝", "InteresThing Assistant 👨‍💻️", "InteresThing Treasury 🏛️"]
-	menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝","InteresThing Treasury 🏛️"]
+	menu = ("InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝","InteresThing Treasury 🏛️")
 	selected_menu = st.sidebar.selectbox("Select an option", menu)
 
 	#Session declarations
