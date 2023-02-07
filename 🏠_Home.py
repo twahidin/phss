@@ -173,7 +173,7 @@ def match_words_to_resources(words_list, db_file): #the associative word is matc
 def extract_student_info(int_list): #overall function that takes in the int list to display all the information in a nicely tab area for students to keep track of their hobbies and interests
 	st.subheader("Your current interest links")
 	if st.session_state.treasure_key == None or len(int_list) == 0:
-		st.warning("Please access the InteresThing tools by clicking the options in the sidebar to generate your links")
+		st.warning("Please access the InteresThing tools by clicking the options in the sidebar to generate your interest links")
 	elif st.session_state.treasure_key != None:
 		int_list = st.session_state.treasure_key
 		topic_list = interests_to_topic(int_list, db_file)
@@ -766,7 +766,7 @@ def main():
 
 
 	if st.session_state.treasure_key == None:
-		st.sidebar.warning("Please acess the quiz or wizard to display your interest links")
+		st.sidebar.warning("Please use the InteresThing Quiz or Wizard to generate your interest links")
 
 	logout = st.sidebar.button("Reset my hobbies")
 	if logout:
@@ -780,7 +780,7 @@ def main():
 		st.image("images/InteresThing.jpeg", width=500)
 		st.subheader("Do more of what makes you happy")
 		st.write("##")
-		st.write("**:blue[To start, click on the sidebar to log in and navigate the application]**")
+		#st.write("**:blue[To start, click on the sidebar to log in and navigate the application]**")
 		st.write("**:orange[For mobile device users, click on the upper left '>' arrow to access the sidebar]**")
 
 
