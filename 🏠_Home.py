@@ -1,17 +1,17 @@
 #version 7 - no login
-import openai
+#import openai
 import streamlit as st
 from streamlit_chat import message
 import time
-import requests
+#pipimport requests
 import sqlite3
-import pygsheets
+#import pygsheets
 import pandas as pd
 import json
 import csv
 from streamlit_disqus import st_disqus
 import streamlit_analytics
-from google.oauth2 import service_account
+#from google.oauth2 import service_account
 from int_quiz import personality_generator, reveal_questions
 from datetime import datetime
 import random
