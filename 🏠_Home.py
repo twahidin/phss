@@ -712,7 +712,7 @@ def main():
 	st.title(":red[InteresThing]")
 	#menu = ["InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝", "InteresThing Assistant 👨‍💻️", "InteresThing Treasury 🏛️"]
 	menu = ("InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝","InteresThing Treasury 🏛️")
-	selected_menu = st.sidebar.selectbox("Select an option", menu)
+	selected_menu = st.sidebar.selectbox("Select an option", ("InteresThing Homepage 🏠", "InteresThing Wizard 🧙", "InteresThing Quiz 📝","InteresThing Treasury 🏛️"))
 
 	#Session declarations
 
