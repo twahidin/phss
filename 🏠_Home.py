@@ -1,4 +1,4 @@
-#version 7 - no login
+#version 8 - no analytics 
 #import openai
 import streamlit as st
 #from streamlit_chat import message
@@ -10,7 +10,7 @@ import pandas as pd
 import json
 import csv
 from streamlit_disqus import st_disqus
-import streamlit_analytics
+#import streamlit_analytics
 #from google.oauth2 import service_account
 from int_quiz import personality_generator, reveal_questions
 from datetime import datetime
@@ -794,57 +794,57 @@ def main():
 
 
 	if selected_menu == "InteresThing Wizard 🧙":
-		with streamlit_analytics.track():
-			st.subheader(":blue[InteresThing Wizard] 🧙")
-			#st.image('images/cauldron.png')
-			restart = st.sidebar.button("Generate new words 🧙")
-			if restart:
-				st.session_state.word_key = None
+		#with streamlit_analytics.track():
+		st.subheader(":blue[InteresThing Wizard] 🧙")
+		#st.image('images/cauldron.png')
+		restart = st.sidebar.button("Generate new words 🧙")
+		if restart:
+			st.session_state.word_key = None
 
-			#st.write("This feature allows you to discover interests based on a set of questions.")
-			placeholder1 = st.empty()
-			if st.session_state.word_key == None:
-				if placeholder1.button("Show me the magic words! 🧞"):
-					number_lists = random_numbers()
-					#placeholder1.write(number_lists)
-					word_lists = match_numbers_to_words(number_lists, db_file)
-					#placeholder1.write(word_lists)
-					st.session_state.word_key = word_lists
-					#st.write(word_lists)
-					placeholder1.empty()
-			if st.session_state.word_key != None:
-				word_lists = st.session_state.word_key
-				#options = st.multiselect('Choose 3 to 5 words that attracts you', word_lists)
-				#st.write(st.session_state.word_key)
-				options = select_words(st.session_state.word_key)
-				#insert_student_data(st.session_state.school_key, st.session_state.stu_key , WIZARD, db_file)
-				#st.session_state.word_key = options
-				if options != None:
-					st.session_state.option_key = options
-					
-					#st.session_state.treasure_key = int_list
-					#st.write(":orange[Click on InteresThing Treasury Tabs below to see your suggested interests!]")
-					int_list = match_words_to_resources(options, db_file)
-					#combine(int_list) v1
-					suggested_hobbies(int_list, "Wizard Discovery Tool")
-					st.write('#')
-					if st.session_state.treasure_key == None:
-						st.session_state.treasure_key = []
-					edit_my_list(int_list + st.session_state.treasure_key)
-					st.write('#')
-					extract_student_info(st.session_state.treasure_key)
-				elif st.session_state.option_key != None:
-					int_list = match_words_to_resources(st.session_state.option_key, db_file)
-					
-					suggested_hobbies(int_list, "Wizard Discovery Tool")
-					st.write('#')
-					if st.session_state.treasure_key == None:
-						st.session_state.treasure_key = []
-					edit_my_list(int_list + st.session_state.treasure_key)
-					st.write('#')
-					extract_student_info(st.session_state.treasure_key)
-			else:
+		#st.write("This feature allows you to discover interests based on a set of questions.")
+		placeholder1 = st.empty()
+		if st.session_state.word_key == None:
+			if placeholder1.button("Show me the magic words! 🧞"):
+				number_lists = random_numbers()
+				#placeholder1.write(number_lists)
+				word_lists = match_numbers_to_words(number_lists, db_file)
+				#placeholder1.write(word_lists)
+				st.session_state.word_key = word_lists
+				#st.write(word_lists)
+				placeholder1.empty()
+		if st.session_state.word_key != None:
+			word_lists = st.session_state.word_key
+			#options = st.multiselect('Choose 3 to 5 words that attracts you', word_lists)
+			#st.write(st.session_state.word_key)
+			options = select_words(st.session_state.word_key)
+			#insert_student_data(st.session_state.school_key, st.session_state.stu_key , WIZARD, db_file)
+			#st.session_state.word_key = options
+			if options != None:
+				st.session_state.option_key = options
+				
+				#st.session_state.treasure_key = int_list
+				#st.write(":orange[Click on InteresThing Treasury Tabs below to see your suggested interests!]")
+				int_list = match_words_to_resources(options, db_file)
+				#combine(int_list) v1
+				suggested_hobbies(int_list, "Wizard Discovery Tool")
+				st.write('#')
+				if st.session_state.treasure_key == None:
+					st.session_state.treasure_key = []
+				edit_my_list(int_list + st.session_state.treasure_key)
+				st.write('#')
 				extract_student_info(st.session_state.treasure_key)
+			elif st.session_state.option_key != None:
+				int_list = match_words_to_resources(st.session_state.option_key, db_file)
+				
+				suggested_hobbies(int_list, "Wizard Discovery Tool")
+				st.write('#')
+				if st.session_state.treasure_key == None:
+					st.session_state.treasure_key = []
+				edit_my_list(int_list + st.session_state.treasure_key)
+				st.write('#')
+				extract_student_info(st.session_state.treasure_key)
+		else:
+			extract_student_info(st.session_state.treasure_key)
 
 
 
@@ -856,48 +856,48 @@ def main():
 		progress_bar = st.sidebar.progress(0)
 		status_text = st.sidebar.empty() 
 
-		with streamlit_analytics.track():
+		#with streamlit_analytics.track():
 
-			int_list = None
-			quiz_list = query_to_list(db_file)
-			with st.form(key="int_quiz"):
-				st.write(":blue[Please choose the statement that you agree with by moving the dot on the slider to right or left]")
-				st.write("##")
-				a_list = reveal_questions(quiz_list)
-				ans_list = a_list[0]
-				submit_button = st.form_submit_button(label='Submit')
-				if submit_button and a_list[1] == False:
-					pc = personality_generator(ans_list)
-					#st.write(pc)
+		int_list = None
+		quiz_list = query_to_list(db_file)
+		with st.form(key="int_quiz"):
+			st.write(":blue[Please choose the statement that you agree with by moving the dot on the slider to right or left]")
+			st.write("##")
+			a_list = reveal_questions(quiz_list)
+			ans_list = a_list[0]
+			submit_button = st.form_submit_button(label='Submit')
+			if submit_button and a_list[1] == False:
+				pc = personality_generator(ans_list)
+				#st.write(pc)
 
-					for i in range(1, 101):
+				for i in range(1, 101):
 
-						status_text.write("%i%% Processing" % i)
-						progress_bar.progress(i)
-						time.sleep(0.03)
+					status_text.write("%i%% Processing" % i)
+					progress_bar.progress(i)
+					time.sleep(0.03)
 
-					status_text.write("Assessing complete!")
-					submit_flag = True   
-					progress_bar.empty()
-					int_list = match_mbti_to_resources(pc, db_file)
-					st.session_state.quiz_key = int_list
-					#st.write(int_list)
-					#insert_student_data(st.session_state.school_key, st.session_state.stu_key , QUIZ, db_file)
-				elif submit_button and a_list[1] == True:
-					st.warning('You have to make a choice for all statements to generate your report', icon="⚠️")
-			if st.session_state.quiz_key != None:
-				#st.write(":orange[Click on InteresThing Treasury Tabs below to see your suggested interests!]")
-				#st.session_state.treasure_key = int_list #The last quiz
-				suggested_hobbies(st.session_state.quiz_key, "Quiz Discovery Tool")
-				st.write('#')
-				if st.session_state.treasure_key == None:
-					st.session_state.treasure_key = []
-				edit_my_list(st.session_state.quiz_key + st.session_state.treasure_key)
-				st.write('#')
-				#int_list = match_words_to_resources(st.session_state.option_key, db_file)
-				extract_student_info(st.session_state.treasure_key)
-			else:
-				extract_student_info(st.session_state.treasure_key)
+				status_text.write("Assessing complete!")
+				submit_flag = True   
+				progress_bar.empty()
+				int_list = match_mbti_to_resources(pc, db_file)
+				st.session_state.quiz_key = int_list
+				#st.write(int_list)
+				#insert_student_data(st.session_state.school_key, st.session_state.stu_key , QUIZ, db_file)
+			elif submit_button and a_list[1] == True:
+				st.warning('You have to make a choice for all statements to generate your report', icon="⚠️")
+		if st.session_state.quiz_key != None:
+			#st.write(":orange[Click on InteresThing Treasury Tabs below to see your suggested interests!]")
+			#st.session_state.treasure_key = int_list #The last quiz
+			suggested_hobbies(st.session_state.quiz_key, "Quiz Discovery Tool")
+			st.write('#')
+			if st.session_state.treasure_key == None:
+				st.session_state.treasure_key = []
+			edit_my_list(st.session_state.quiz_key + st.session_state.treasure_key)
+			st.write('#')
+			#int_list = match_words_to_resources(st.session_state.option_key, db_file)
+			extract_student_info(st.session_state.treasure_key)
+		else:
+			extract_student_info(st.session_state.treasure_key)
 			# elif st.session_state.treasure_key != None:
 			# 	st.write('#')
 			# 	#int_list = match_words_to_resources(st.session_state.option_key, db_file)
@@ -928,14 +928,14 @@ def main():
 		st.subheader("InterestThing Treasury")
 		st.write("#")
 		#st.write("Click on the start button to draw 3 random interests")
-		with streamlit_analytics.track():
-			extract_likes_show_interests(db_file)
-			#insert_student_data(st.session_state.school_key, st.session_state.stu_key , TREASURE, db_file)
-			#st.write("Feature to be released soon")
-			st.write('##')
-			if st.session_state.add_key != None and st.session_state.treasure_key != None:
-				edit_my_list(st.session_state.add_key + st.session_state.treasure_key)
-			extract_student_info(st.session_state.treasure_key)
+		#with streamlit_analytics.track():
+		extract_likes_show_interests(db_file)
+		#insert_student_data(st.session_state.school_key, st.session_state.stu_key , TREASURE, db_file)
+		#st.write("Feature to be released soon")
+		st.write('##')
+		if st.session_state.add_key != None and st.session_state.treasure_key != None:
+			edit_my_list(st.session_state.add_key + st.session_state.treasure_key)
+		extract_student_info(st.session_state.treasure_key)
 
 
 
